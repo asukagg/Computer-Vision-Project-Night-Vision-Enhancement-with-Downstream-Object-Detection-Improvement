@@ -1,0 +1,71 @@
+# Night Vision Enhancement Research Configuration
+
+# Dataset Configuration
+dataset:
+  lol_root: "./LOLdataset"
+  exdark_root: "./ExDark"
+  train_val_split: 0.8
+  test_split: 0.1
+  
+# Enhancement Model Configuration
+enhancement:
+  model_name: "SNR_Frequency_Enhancer"
+  input_channels: 3
+  output_channels: 3
+  num_layers: 4
+  transformer_dim: 256
+  num_heads: 8
+  snr_threshold: 0.3
+  use_frequency_domain: true
+  
+# Domain Adaptation Configuration
+domain_adaptation:
+  method: "similarity_min_max"
+  use_pseudo_labeling: true
+  pseudo_label_threshold: 0.5
+  teacher_student_ratio: 0.9
+  
+# Detection Configuration
+detector:
+  backbone: "yolov8"  # or "detr"
+  num_classes: 12  # ExDark has 12 classes
+  conf_threshold: 0.5
+  iou_threshold: 0.5
+  input_size: 640
+  
+# Loss Function Configuration
+losses:
+  lambda_enhance: 1.0      # Enhancement loss weight
+  lambda_detect: 1.5       # Detection loss weight
+  lambda_domain: 0.5       # Domain adaptation loss weight
+  perceptual_weight: 0.3
+  ssim_weight: 0.2
+  l1_weight: 0.5
+  
+# Training Configuration
+training:
+  batch_size: 16
+  num_epochs: 100
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  warmup_epochs: 5
+  optimizer: "adam"
+  scheduler: "cosine"
+  
+# Evaluation Configuration
+evaluation:
+  metrics: ["PSNR", "SSIM", "AP50", "AP50_95", "F1"]
+  save_comparisons: true
+  comparison_dir: "./comparisons"
+  
+# Device Configuration
+device:
+  cuda: true
+  multi_gpu: false
+  num_workers: 4
+  
+# Paths
+paths:
+  checkpoint_dir: "./checkpoints"
+  log_dir: "./logs"
+  result_dir: "./results"
